@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
     name : {
         type : String,
+        required : [true, "Provide product name"] // Validation added as per DB design
     },
     image : {
         type : Array,
@@ -26,15 +27,15 @@ const productSchema = new mongoose.Schema({
     },
     stock : {
         type : Number,
-        default : null
+        default : 0 // null ki jagah 0 behtar hai stock calculation ke liye
     },
     price : {
         type : Number,
-        defualt : null
+        default : 0 // Typo fix: "defualt" ko "default" kiya gaya hai
     },
     discount : {
         type : Number,
-        default : null
+        default : 0
     },
     description : {
         type : String,
@@ -52,16 +53,17 @@ const productSchema = new mongoose.Schema({
     timestamps : true
 })
 
-//create a text index
+// Text index for search optimization
 productSchema.index({
     name  : "text",
     description : 'text'
 },{
-    name : 10,
-    description : 5
+    weights: { // Weights property ko correct syntax mein dala hai
+        name : 10,
+        description : 5
+    }
 })
 
-
-const ProductModel = mongoose.model('product',productSchema)
+const ProductModel = mongoose.model('product', productSchema)
 
 export default ProductModel

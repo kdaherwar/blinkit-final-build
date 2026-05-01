@@ -3,16 +3,16 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     name : {
         type : String,
-        required : [true,"Provide name"]
+        required : [true, "Provide name"]
     },
     email : {
         type : String,
-        required : [true, "provide email"],
+        required : [true, "Provide email"],
         unique : true
     },
     password : {
         type : String,
-        required : [true, "provide password"]
+        required : [true, "Provide password"]
     },
     avatar : {
         type : String,
@@ -32,29 +32,31 @@ const userSchema = new mongoose.Schema({
     },
     last_login_date : {
         type : Date,
-        default : ""
+        default : null // Date ke liye null ya default hata dena behtar hai
     },
     status : {
         type : String,
-        enum : ["Active","Inactive","Suspended"],
+        // Diagram (image_3d245e.jpg) ke mutabiq status enum values
+        enum : ["Active", "Inactive", "Suspended"], 
         default : "Active"
     },
+    // References as per your Architecture Diagram
     address_details : [
         {
             type : mongoose.Schema.ObjectId,
-            ref : 'address'
+            ref : 'address' // Make sure address model name matches exactly
         }
     ],
     shopping_cart : [
         {
             type : mongoose.Schema.ObjectId,
-            ref : 'cartProduct'
+            ref : 'cartProduct' // Matches your cartProduct table in diagram
         }
     ],
     orderHistory : [
         {
             type : mongoose.Schema.ObjectId,
-            ref : 'order'
+            ref : 'order' // Matches order table in diagram
         }
     ],
     forgot_password_otp : {
@@ -63,17 +65,18 @@ const userSchema = new mongoose.Schema({
     },
     forgot_password_expiry : {
         type : Date,
-        default : ""
+        default : null
     },
     role : {
         type : String,
-        enum : ['ADMIN',"USER"],
+        enum : ['ADMIN', "USER"],
         default : "USER"
     }
 },{
     timestamps : true
 })
 
-const UserModel = mongoose.model("User",userSchema)
+// Model name diagram ke hisaab se "User" hi rakha hai
+const UserModel = mongoose.model("User", userSchema)
 
 export default UserModel
